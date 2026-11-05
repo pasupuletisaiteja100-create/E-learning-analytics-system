@@ -1,0 +1,210 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manage Enrollments</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            margin: 35px;
+            color: #1e293b;
+        }
+
+        .container {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+        }
+
+        input, select {
+            padding: 11px;
+            margin: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .add {
+            background: #2563eb;
+            color: white;
+        }
+
+        .edit {
+            background: #eab308;
+            color: black;
+        }
+
+        .delete {
+            background: #dc2626;
+            color: white;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 25px;
+        }
+
+        th, td {
+            padding: 13px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #e2e8f0;
+        }
+
+        .message {
+            color: green;
+        }
+
+        .form-section {
+            background: #f8fafc;
+            padding: 18px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Manage Enrollments</h1>
+
+    <a href="/">Back to Dashboard</a> |
+    <a href="/learners">Manage Learners</a>
+
+    {% with messages = get_flashed_messages() %}
+        {% for message in messages %}
+            <p class="message">{{ message }}</p>
+        {% endfor %}
+    {% endwith %}
+
+    <div class="form-section">
+
+        <h3>Enroll Learner in Course</h3>
+
+        <form method="POST" action="{{ url_for('enrollments') }}">
+
+            <label>Select Learner:</label>
+
+            <select name="learner_id" required>
+                <option value="">Choose Learner</option>
+
+                {% for learner in learners %}
+                    <option value="{{ learner.learner_id }}">
+                        {{ learner.roll_no }}
+                    </option>
+                {% endfor %}
+
+            </select>
+
+            <label>Select Course:</label>
+
+            <select name="course_id" required>
+                <option value="">Choose Course</option>
+
+                {% for course in courses %}
+                    <option value="{{ course.course_id }}">
+                        {{ course.course_name }}
+                    </option>
+                {% endfor %}
+
+            </select>
+
+            <label>Status:</label>
+
+            <select name="status">
+                <option value="enrolled">Enrolled</option>
+                <option value="completed">Completed</option>
+                <option value="withdrawn">Withdrawn</option>
+            </select>
+
+            <button type="submit" class="add">
+                Add Enrollment
+            </button>
+
+        </form>
+
+    </div>
+
+    <h3>Enrollment Records</h3>
+
+    <table>
+
+        <tr>
+            <th>ID</th>
+            <th>Roll Number</th>
+            <th>Course</th>
+            <th>Enrolled At</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+
+        {% for e in enrollments %}
+
+        <tr>
+
+            <td>{{ e.enrollment_id }}</td>
+
+            <td>{{ e.roll_no }}</td>
+
+            <td>{{ e.course_name }}</td>
+
+            <td>{{ e.enrolled_at }}</td>
+
+            <td>{{ e.status }}</td>
+
+            <td>
+
+                <a href="{{ url_for(
+                    'edit_enrollment',
+                    enrollment_id=e.enrollment_id
+                ) }}">
+                    <button class="edit">Edit</button>
+                </a>
+
+                <form
+                    method="POST"
+                    action="{{ url_for(
+                        'delete_enrollment',
+                        enrollment_id=e.enrollment_id
+                    ) }}"
+                    style="display:inline;"
+                    onsubmit="return confirm('Delete this enrollment?');"
+                >
+
+                    <button type="submit" class="delete">
+                        Delete
+                    </button>
+
+                </form>
+
+            </td>
+
+        </tr>
+
+        {% else %}
+
+        <tr>
+            <td colspan="6">No enrollment records found.</td>
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+</div>
+
+</body>
+</html>

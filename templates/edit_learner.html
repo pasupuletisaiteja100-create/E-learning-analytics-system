@@ -1,0 +1,70 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Learner</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            margin: 50px;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 450px;
+        }
+
+        input {
+            width: 90%;
+            padding: 12px;
+            margin: 12px 0;
+        }
+
+        button {
+            padding: 11px 20px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>Edit Learner</h2>
+
+    <p>Learner ID: {{ learner.learner_id }}</p>
+
+    <form method="POST">
+
+        <label>Roll Number</label>
+
+        <input
+            type="text"
+            name="roll_no"
+            value="{{ learner.roll_no or '' }}"
+            maxlength="30"
+            required
+        >
+
+        <button type="submit">Update Learner</button>
+
+    </form>
+
+    <br>
+
+    <a href="{{ url_for('learners') }}">
+        Back to Learners
+    </a>
+
+</div>
+
+</body>
+</html>

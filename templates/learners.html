@@ -1,0 +1,168 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manage Learners</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            margin: 35px;
+            color: #1e293b;
+        }
+
+        .container {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+        }
+
+        input {
+            padding: 10px;
+            width: 250px;
+            margin-right: 10px;
+        }
+
+        button {
+            padding: 10px 16px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .add {
+            background: #2563eb;
+            color: white;
+        }
+
+        .edit {
+            background: #eab308;
+            color: black;
+        }
+
+        .delete {
+            background: #dc2626;
+            color: white;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 25px;
+        }
+
+        th, td {
+            padding: 13px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background: #e2e8f0;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .message {
+            color: green;
+            margin: 12px 0;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Manage Learners</h1>
+
+    <a href="/">Back to Dashboard</a>
+
+    {% with messages = get_flashed_messages() %}
+        {% for message in messages %}
+            <p class="message">{{ message }}</p>
+        {% endfor %}
+    {% endwith %}
+
+    <h3>Add New Learner</h3>
+
+    <form method="POST" action="{{ url_for('learners') }}">
+
+        <input
+            type="text"
+            name="roll_no"
+            placeholder="Enter Roll Number"
+            maxlength="30"
+            required
+        >
+
+        <button type="submit" class="add">
+            Add Learner
+        </button>
+
+    </form>
+
+    <h3>Registered Learners</h3>
+
+    <table>
+
+        <tr>
+            <th>Learner ID</th>
+            <th>Roll Number</th>
+            <th>Actions</th>
+        </tr>
+
+        {% for learner in learners %}
+
+        <tr>
+
+            <td>{{ learner.learner_id }}</td>
+
+            <td>{{ learner.roll_no or "Not assigned" }}</td>
+
+            <td>
+
+                <a href="{{ url_for(
+                    'edit_learner',
+                    learner_id=learner.learner_id
+                ) }}">
+                    <button class="edit">Edit</button>
+                </a>
+
+                <form
+                    method="POST"
+                    action="{{ url_for(
+                        'delete_learner',
+                        learner_id=learner.learner_id
+                    ) }}"
+                    style="display:inline;"
+                    onsubmit="return confirm('Delete this learner?');"
+                >
+
+                    <button type="submit" class="delete">
+                        Delete
+                    </button>
+
+                </form>
+
+            </td>
+
+        </tr>
+
+        {% else %}
+
+        <tr>
+            <td colspan="3">No learners found.</td>
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+</div>
+
+</body>
+</html>

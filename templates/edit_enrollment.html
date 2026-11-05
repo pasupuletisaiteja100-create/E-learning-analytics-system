@@ -1,0 +1,119 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Enrollment</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            margin: 40px;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            max-width: 500px;
+            border-radius: 12px;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px;
+            margin: 12px 0;
+        }
+
+        button {
+            padding: 12px 20px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>Edit Enrollment</h2>
+
+    <p>Enrollment ID: {{ enrollment.enrollment_id }}</p>
+
+    <form method="POST">
+
+        <label>Select Learner:</label>
+
+        <select name="learner_id" required>
+
+            {% for learner in learners %}
+
+                <option
+                    value="{{ learner.learner_id }}"
+                    {% if learner.learner_id == enrollment.learner_id %}
+                        selected
+                    {% endif %}
+                >
+                    {{ learner.roll_no }}
+                </option>
+
+            {% endfor %}
+
+        </select>
+
+        <label>Select Course:</label>
+
+        <select name="course_id" required>
+
+            {% for course in courses %}
+
+                <option
+                    value="{{ course.course_id }}"
+                    {% if course.course_id == enrollment.course_id %}
+                        selected
+                    {% endif %}
+                >
+                    {{ course.course_name }}
+                </option>
+
+            {% endfor %}
+
+        </select>
+
+        <label>Status:</label>
+
+        <select name="status" required>
+
+            <option value="enrolled"
+                {% if enrollment.status == 'enrolled' %}selected{% endif %}>
+                Enrolled
+            </option>
+
+            <option value="completed"
+                {% if enrollment.status == 'completed' %}selected{% endif %}>
+                Completed
+            </option>
+
+            <option value="withdrawn"
+                {% if enrollment.status == 'withdrawn' %}selected{% endif %}>
+                Withdrawn
+            </option>
+
+        </select>
+
+        <button type="submit">Update Enrollment</button>
+
+    </form>
+
+    <br>
+
+    <a href="{{ url_for('enrollments') }}">
+        Back to Enrollments
+    </a>
+
+</div>
+
+</body>
+</html>
